@@ -82,7 +82,64 @@ public class CircularQueue {
         // We return the front item because it will be removed first.
         return items[front];
     }
+    
+    // This method removes the first food item from the queue.
+    // We follow FIFO, so the oldest item is removed first.
+    // We return null if the queue is empty.
+    public FoodItem dequeue() {
 
+        if (isEmpty()) {
+            return null;
+        }
+
+        // We save the item before removing it.
+        // This allows the program to return the removed item.
+        FoodItem removedItem = items[front];
+
+        // We clear the old position.
+        // This helps us remove the reference to the old item.
+        items[front] = null;
+
+        // We move front to the next position.
+        // The % operator moves front back to 0 after position 7.
+        front = (front + 1) % CAPACITY;
+
+        // We reduce the number of items by 1.
+        count--;
+
+        // We reset the queue when the last item is removed.
+        // This makes the queue ready for new items.
+        if (count == 0) {
+            front = 0;
+            rear = -1;
+        }
+
+        // We return the food item that was removed.
+        return removedItem;
+    }
+    
+    // This method returns all food items in FIFO order.
+    // We use a new array to keep the original queue safe.
+    // Display and Search can use this method to read the items.
+    public FoodItem[] getItems() {
+
+        // We create an array with the current number of items.
+        FoodItem[] result = new FoodItem[count];
+
+        // We copy each item in the correct order.
+        for (int i = 0; i < count; i++) {
+
+            // We use % to move around the circular queue.
+            int index = (front + i) % CAPACITY;
+
+            // We copy the item into the result array.
+            result[i] = items[index];
+        }
+
+        // We return the items in FIFO order.
+        return result;
+    }
+    
     // This method checks if the queue has no items.
     // We return true when count is 0.
     public boolean isEmpty() {
