@@ -32,9 +32,33 @@ public class FoodItem {
 
     }
 // record entry time
+
     public void markAddedToStorage() {
         this.timeAdded = LocalDateTime.now();
+
     }
-    
-    
+
+    //getter
+    public String getName() {
+
+        return this.name;
+    }
+
+    //getter
+    public double getWeightInGrams() {
+
+        return this.weightInGrams;
+    }
+
+    //getter
+    public LocalDate getBestBeforeDate() {
+
+        return this.bestBeforeDate;
+    }
+
+    //getter
+    public LocalDateTime getTimeAdded() {
+
+        return this.timeAdded;
+    }
 }
