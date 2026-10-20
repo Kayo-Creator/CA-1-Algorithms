@@ -41,7 +41,47 @@ public class CircularQueue {
         // The queue starts with zero items.
         count = 0;
     }
+    
+    // This method adds a food item to the queue.
+    // We return false if the item is null or the queue is full.
+    // This stops the queue from storing invalid items or more than 8 items.
+    public boolean enqueue(FoodItem item) {
 
+        if (item == null || isFull()) {
+            return false;
+        }
+
+        // We record the time when the food enters the storage.
+        item.markAddedToStorage();
+
+        // We move rear to the next position.
+        // The % operator moves rear back to 0 after position 7.
+        // This helps us reuse empty spaces in the queue.
+        rear = (rear + 1) % CAPACITY;
+
+        // We store the food item at the new rear position.
+        items[rear] = item;
+
+        // We increase the number of items by 1.
+        count++;
+
+        // We return true because the item was added successfully.
+        return true;
+    }
+
+
+    // This method returns the first food item in the queue.
+    // We do not remove the item when we use peek().
+    // We return null if the queue is empty.
+    public FoodItem peek() {
+
+        if (isEmpty()) {
+            return null;
+        }
+
+        // We return the front item because it will be removed first.
+        return items[front];
+    }
 
     // This method checks if the queue has no items.
     // We return true when count is 0.
