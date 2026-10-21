@@ -140,6 +140,40 @@ public class CircularQueue {
         return result;
     }
     
+        // This method displays all food items in the queue.
+    // We use FIFO order to show the items.
+    // We check if the queue is empty before displaying.
+
+    public void display() {
+
+        // We check if there are no food items.
+        if (isEmpty()) {
+            System.out.println("The queue is empty.");
+            return;
+        }
+
+        // We show a title before displaying the items.
+        System.out.println("Food items in the queue:");
+
+        // We get all items in the correct order.
+        FoodItem[] currentItems = getItems();
+
+        // We use a loop to display each food item.
+        for (int i = 0; i < currentItems.length; i++) {
+
+            // We get the current food item.
+            FoodItem item = currentItems[i];
+
+            // We display the food information.
+            System.out.println(
+                (i + 1) + ". " + item.getName()
+                + " | Weight: " + item.getWeightInGrams() + " g"
+                + " | Best before: " + item.getBestBeforeDate()
+                + " | Storage time: " + item.getTimeAdded()
+            );
+        }
+    }
+    
     // This method checks if the queue has no items.
     // We return true when count is 0.
     public boolean isEmpty() {
