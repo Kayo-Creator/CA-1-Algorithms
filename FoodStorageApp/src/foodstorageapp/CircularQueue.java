@@ -174,6 +174,59 @@ public class CircularQueue {
         }
     }
     
+    // This method searches for food items by name.
+    // We use getItems() to get the food items in FIFO order.
+    // We return an empty array if the search name is empty.
+
+    public FoodItem[] search(String searchName) {
+
+        // We check if the search name is empty or null.
+        // This stops the program from searching with invalid input.
+        if (searchName == null || searchName.trim().isEmpty()) {
+            return new FoodItem[0];
+        }
+
+        // We get all food items from the queue.
+        FoodItem[] currentItems = getItems();
+
+        // We create an array to store matching food items.
+        FoodItem[] matches = new FoodItem[currentItems.length];
+
+        // This variable counts the matching items.
+        int matchCount = 0;
+
+        // We remove extra spaces from the search name.
+        String nameToFind = searchName.trim();
+
+        // We check each food item in the queue.
+        for (FoodItem item : currentItems) {
+
+            // We compare the food names without checking capital letters.
+            // This means "burger" and "Burger" can match.
+            if (item.getName() != null
+                    && item.getName().equalsIgnoreCase(nameToFind)) {
+
+                // We save the matching food item.
+                matches[matchCount] = item;
+
+                // We increase the number of matches.
+                matchCount++;
+            }
+        }
+
+        // We create a new array with only the matching items.
+        FoodItem[] result = new FoodItem[matchCount];
+
+        // We copy the matching items into the result array.
+        for (int i = 0; i < matchCount; i++) {
+            result[i] = matches[i];
+        }
+
+        // We return all matching food items.
+        // If nothing matches, the result array is empty.
+        return result;
+    }
+    
     // This method checks if the queue has no items.
     // We return true when count is 0.
     public boolean isEmpty() {
