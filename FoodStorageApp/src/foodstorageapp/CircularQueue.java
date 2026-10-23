@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package foodstorageapp;
-
+import java.time.LocalDate;
 public class CircularQueue {
 
     // The storage can hold only 8 food items.
@@ -47,9 +47,11 @@ public class CircularQueue {
     // This stops the queue from storing invalid items or more than 8 items.
     public boolean enqueue(FoodItem item) {
 
-        if (item == null || isFull()) {
-            return false;
-        }
+     // We check if the queue is full or the food data is invalid.
+     // This stops the program from adding incorrect food items.
+       if (isFull() || !isValidFoodItem(item)) {
+       return false;
+       }
 
         // We record the time when the food enters the storage.
         item.markAddedToStorage();
@@ -69,7 +71,65 @@ public class CircularQueue {
         return true;
     }
 
+    // This method checks if the food information is valid.
+    // We check the name, weight and best-before date.
+    private boolean isValidFoodItem(FoodItem item) {
 
+        // We do not accept an empty food item.
+        if (item == null) {
+            return false;
+        }
+
+        // We check if the food name is empty.
+        String name = item.getName();
+
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+
+        // The restaurant has only five food types.
+        // We accept these names without checking capital letters.
+        String cleanName = name.trim();
+
+        boolean validName =
+                cleanName.equalsIgnoreCase("Burger")
+                || cleanName.equalsIgnoreCase("Pizza")
+                || cleanName.equalsIgnoreCase("Fries")
+                || cleanName.equalsIgnoreCase("Sandwich")
+                || cleanName.equalsIgnoreCase("Hotdog");
+
+        // We stop the program if the food name is not allowed.
+        if (!validName) {
+            return false;
+        }
+
+        // The weight must be a valid number greater than zero.
+        double weight = item.getWeightInGrams();
+
+        if (!Double.isFinite(weight) || weight <= 0) {
+            return false;
+        }
+
+        // The best-before date cannot be empty.
+        LocalDate bestBeforeDate = item.getBestBeforeDate();
+
+        if (bestBeforeDate == null) {
+            return false;
+        }
+
+        // We allow dates from today to 14 days from today.
+        // This follows the two-week limit in the assignment.
+        LocalDate today = LocalDate.now();
+        LocalDate lastDate = today.plusDays(14);
+
+        if (bestBeforeDate.isBefore(today)
+                || bestBeforeDate.isAfter(lastDate)) {
+            return false;
+        }
+
+        // We return true when all checks pass.
+        return true;
+    }
     // This method returns the first food item in the queue.
     // We do not remove the item when we use peek().
     // We return null if the queue is empty.
@@ -227,6 +287,7 @@ public class CircularQueue {
         return result;
     }
     
+     
     // This method checks if the queue has no items.
     // We return true when count is 0.
     public boolean isEmpty() {
