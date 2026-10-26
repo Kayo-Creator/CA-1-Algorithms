@@ -4,15 +4,7 @@
  */
 package foodstorageapp;
 import java.time.LocalDate;
-public class CircularQueue {
-
-    // The storage can hold only 8 food items.
-    // We use a fixed value because the maximum capacity is 8.
-    private static final int CAPACITY = 8;
-
-    // We use an array to store FoodItem objects.
-    // Each object contains the food name, weight and dates.
-    private final FoodItem[] items;
+public class CircularQueue extends AbstractFoodStorage {
 
     // Front points to the first item in the queue.
     // This item will be removed first.
@@ -21,26 +13,17 @@ public class CircularQueue {
     // Rear points to the last item added to the queue.
     private int rear;
 
-    // Count stores the number of items in the queue.
-    // We use it to check if the queue is empty or full.
-    private int count;
 
+    // This constructor sets the starting positions.
+// AbstractFoodStorage already creates the array and sets count to 0.
+public CircularQueue() {
 
-    // This constructor creates an empty queue.
-    public CircularQueue() {
+    // The first item will use index 0.
+    front = 0;
 
-        // We create an array that can hold 8 food items.
-        items = new FoodItem[CAPACITY];
-
-        // Front starts at index 0.
-        front = 0;
-
-        // Rear starts at -1 because no item has been added.
-        rear = -1;
-
-        // The queue starts with zero items.
-        count = 0;
-    }
+    // No item has been added yet.
+    rear = -1;
+}
     
     // This method adds a food item to the queue.
     // We return false if the item is null or the queue is full.
@@ -130,6 +113,20 @@ public class CircularQueue {
         // We return true when all checks pass.
         return true;
     }
+    
+    // This method follows the FoodStorage interface.
+    // We use enqueue() to add an item to the queue.
+    @Override
+    public void add(FoodItem item) {
+
+        // We show a message if the item cannot be added.
+        if (!enqueue(item)) {
+            System.out.println(
+                    "Cannot add the food item. Please check the details or storage capacity."
+            );
+        }
+    }
+    
     // This method returns the first food item in the queue.
     // We do not remove the item when we use peek().
     // We return null if the queue is empty.
@@ -176,6 +173,15 @@ public class CircularQueue {
 
         // We return the food item that was removed.
         return removedItem;
+    }
+
+    //This method follows the FoodStorage interface.
+    //We use dequeue() to remove the first food item.
+    @Overidde
+    public FoodItem remove() {
+        //We return the removed item to the application.
+        //Dequeue returns null if the queue is empty.
+        return dequeue();
     }
     
     // This method returns all food items in FIFO order.
@@ -287,25 +293,4 @@ public class CircularQueue {
         return result;
     }
     
-     
-    // This method checks if the queue has no items.
-    // We return true when count is 0.
-    public boolean isEmpty() {
-        return count == 0;
-    }
-
-
-    // This method checks if the queue has reached its limit.
-    // We return true when count is 8.
-    public boolean isFull() {
-        return count == CAPACITY;
-    }
-
-
-    // This method returns the number of stored food items.
-    // We use count because it tracks the current number of items.
-    public int size() {
-        return count;
-    }
-
 }
