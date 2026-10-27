@@ -130,6 +130,7 @@ public CircularQueue() {
     // This method returns the first food item in the queue.
     // We do not remove the item when we use peek().
     // We return null if the queue is empty.
+    @Override
     public FoodItem peek() {
 
         if (isEmpty()) {
@@ -177,7 +178,7 @@ public CircularQueue() {
 
     //This method follows the FoodStorage interface.
     //We use dequeue() to remove the first food item.
-    @Overidde
+    @Override
     public FoodItem remove() {
         //We return the removed item to the application.
         //Dequeue returns null if the queue is empty.
@@ -187,6 +188,7 @@ public CircularQueue() {
     // This method returns all food items in FIFO order.
     // We use a new array to keep the original queue safe.
     // Display and Search can use this method to read the items.
+    @Override
     public FoodItem[] getItems() {
 
         // We create an array with the current number of items.
