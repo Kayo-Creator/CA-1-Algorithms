@@ -3,16 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package foodstorageapp;
-
-public class CircularQueue {
-
-    // The storage can hold only 8 food items.
-    // We use a fixed value because the maximum capacity is 8.
-    private static final int CAPACITY = 8;
-
-    // We use an array to store FoodItem objects.
-    // Each object contains the food name, weight and dates.
-    private final FoodItem[] items;
+import java.time.LocalDate;
+public class CircularQueue extends AbstractFoodStorage {
 
     // Front points to the first item in the queue.
     // This item will be removed first.
@@ -21,35 +13,28 @@ public class CircularQueue {
     // Rear points to the last item added to the queue.
     private int rear;
 
-    // Count stores the number of items in the queue.
-    // We use it to check if the queue is empty or full.
-    private int count;
 
+    // This constructor sets the starting positions.
+// AbstractFoodStorage already creates the array and sets count to 0.
+public CircularQueue() {
 
-    // This constructor creates an empty queue.
-    public CircularQueue() {
+    // The first item will use index 0.
+    front = 0;
 
-        // We create an array that can hold 8 food items.
-        items = new FoodItem[CAPACITY];
-
-        // Front starts at index 0.
-        front = 0;
-
-        // Rear starts at -1 because no item has been added.
-        rear = -1;
-
-        // The queue starts with zero items.
-        count = 0;
-    }
+    // No item has been added yet.
+    rear = -1;
+}
     
     // This method adds a food item to the queue.
     // We return false if the item is null or the queue is full.
     // This stops the queue from storing invalid items or more than 8 items.
     public boolean enqueue(FoodItem item) {
 
-        if (item == null || isFull()) {
-            return false;
-        }
+     // We check if the queue is full or the food data is invalid.
+     // This stops the program from adding incorrect food items.
+       if (isFull() || !isValidFoodItem(item)) {
+       return false;
+       }
 
         // We record the time when the food enters the storage.
         item.markAddedToStorage();
@@ -69,10 +54,83 @@ public class CircularQueue {
         return true;
     }
 
+    // This method checks if the food information is valid.
+    // We check the name, weight and best-before date.
+    private boolean isValidFoodItem(FoodItem item) {
 
+        // We do not accept an empty food item.
+        if (item == null) {
+            return false;
+        }
+
+        // We check if the food name is empty.
+        String name = item.getName();
+
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+
+        // The restaurant has only five food types.
+        // We accept these names without checking capital letters.
+        String cleanName = name.trim();
+
+        boolean validName =
+                cleanName.equalsIgnoreCase("Burger")
+                || cleanName.equalsIgnoreCase("Pizza")
+                || cleanName.equalsIgnoreCase("Fries")
+                || cleanName.equalsIgnoreCase("Sandwich")
+                || cleanName.equalsIgnoreCase("Hotdog");
+
+        // We stop the program if the food name is not allowed.
+        if (!validName) {
+            return false;
+        }
+
+        // The weight must be a valid number greater than zero.
+        double weight = item.getWeightInGrams();
+
+        if (!Double.isFinite(weight) || weight <= 0) {
+            return false;
+        }
+
+        // The best-before date cannot be empty.
+        LocalDate bestBeforeDate = item.getBestBeforeDate();
+
+        if (bestBeforeDate == null) {
+            return false;
+        }
+
+        // We allow dates from today to 14 days from today.
+        // This follows the two-week limit in the assignment.
+        LocalDate today = LocalDate.now();
+        LocalDate lastDate = today.plusDays(14);
+
+        if (bestBeforeDate.isBefore(today)
+                || bestBeforeDate.isAfter(lastDate)) {
+            return false;
+        }
+
+        // We return true when all checks pass.
+        return true;
+    }
+    
+    // This method follows the FoodStorage interface.
+    // We use enqueue() to add an item to the queue.
+    @Override
+    public void add(FoodItem item) {
+
+        // We show a message if the item cannot be added.
+        if (!enqueue(item)) {
+            System.out.println(
+                    "Cannot add the food item. Please check the details or storage capacity."
+            );
+        }
+    }
+    
     // This method returns the first food item in the queue.
     // We do not remove the item when we use peek().
     // We return null if the queue is empty.
+    @Override
     public FoodItem peek() {
 
         if (isEmpty()) {
@@ -117,10 +175,20 @@ public class CircularQueue {
         // We return the food item that was removed.
         return removedItem;
     }
+
+    //This method follows the FoodStorage interface.
+    //We use dequeue() to remove the first food item.
+    @Override
+    public FoodItem remove() {
+        //We return the removed item to the application.
+        //Dequeue returns null if the queue is empty.
+        return dequeue();
+    }
     
     // This method returns all food items in FIFO order.
     // We use a new array to keep the original queue safe.
     // Display and Search can use this method to read the items.
+    @Override
     public FoodItem[] getItems() {
 
         // We create an array with the current number of items.
@@ -227,24 +295,4 @@ public class CircularQueue {
         return result;
     }
     
-    // This method checks if the queue has no items.
-    // We return true when count is 0.
-    public boolean isEmpty() {
-        return count == 0;
-    }
-
-
-    // This method checks if the queue has reached its limit.
-    // We return true when count is 8.
-    public boolean isFull() {
-        return count == CAPACITY;
-    }
-
-
-    // This method returns the number of stored food items.
-    // We use count because it tracks the current number of items.
-    public int size() {
-        return count;
-    }
-
 }
