@@ -5,7 +5,22 @@
 package foodstorageapp;
 
 /**
+ * * FoodStack stores up to eight food items.
  *
+ * It uses LIFO: the last item added is removed first.
+ * This matches adding and removing food from the same side.
+ *
+ * Time complexity:
+ * n means the number of stored items.
+ *
+ * add: - stores an item in the next free position.
+ * remove: - removes the item at the top.
+ * peek: - reads the top item.
+ * isEmpty, isFull and size: check or return the count.
+ * getItems: - copies each stored item into a new array.
+ *
+ * Advantage: adding, removing and reading the top are fast.
+ * Limitation: older food may remain while newer food is removed.
  * @author kayon
  */
 //Reuse the array, item count, and checks from the shared class.
