@@ -37,19 +37,55 @@ public class FoodStack extends AbstractFoodStorage {
         count++;
     }
 
-    //The following are temporary methods
+//Remove and return the most recently added food.
     @Override
     public FoodItem remove() {
-        throw new UnsupportedOperationException("Remove is not ready yet.");
+
+        //Stop removal when there are no items.
+        if (isEmpty()) {
+            throw new IllegalStateException("Storage is empty.");
+        }
+
+        //Reduce the count so it points to the top item's position.
+        count--;
+
+        //Keep the item so we can return it.
+        FoodItem removedItem = items[count];
+
+        //Clear the array position that the item occupied.
+        items[count] = null;
+
+        //Return the removed food item.
+        return removedItem;
     }
+
+    // Return the stored items in the order they would be removed.
+    @Override
+    public FoodItem[] getItems() {
+
+        // Create a separate array with space for the stored items.
+        FoodItem[] storedItems = new FoodItem[count];
+
+        // Copy items from the top of the stack downwards.
+        for (int i = 0; i < count; i++) {
+            storedItems[i] = items[count - 1 - i];
+        }
+
+        // Return the copy for Display and Search to use.
+        return storedItems;
+    }
+// Read the top food item while keeping it in the stack.
 
     @Override
     public FoodItem peek() {
-        throw new UnsupportedOperationException("Peek is not ready yet.");
+
+        // Stop when there are no items to read.
+        if (isEmpty()) {
+            throw new IllegalStateException("Storage is empty.");
+        }
+
+        // The top item is one position below the current count.
+        return items[count - 1];
     }
 
-    @Override
-    public FoodItem[] getItems() {
-        throw new UnsupportedOperationException("Reading items is not ready yet.");
-    }
 }
