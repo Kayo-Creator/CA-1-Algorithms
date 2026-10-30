@@ -129,6 +129,43 @@ public class FoodStackTest {
                 && testStack.size() == 0
                 && testStack.getItems().length == 0));
 
-    }
+ // Test 8: Test the shared Display and Search methods.
+        // Use FoodStorage so the common methods can be tested.
 
+        FoodStorage commonStack = new FoodStack();
+
+        // Create a valid date within the next 14 days.
+        LocalDate displayDate = LocalDate.now().plusDays(7);
+
+        // Add three food items to the Stack.
+        commonStack.add(new FoodItem("Burger", 250.0, displayDate));
+        commonStack.add(new FoodItem("Pizza", 120.0, displayDate));
+        commonStack.add(new FoodItem("Fries", 90.0, displayDate));
+
+ // Test 8: Display all food items.
+        // Check the Output window to verify the food details.
+        System.out.println("\n8. Shared Display Test:");
+        commonStack.display();
+
+        // Test 9: Search should ignore uppercase and lowercase letters.
+        FoodItem[] searchResults = commonStack.search("pIzZa");
+
+        System.out.println(
+                "9. Case-insensitive search: "
+                + (searchResults.length == 1
+                && searchResults[0].getName().equals("Pizza"))
+        );
+        
+ // Test 10: A blank search should return no results.
+        System.out.println(
+                "10. Blank search rejected: "
+                + (commonStack.search(" ").length == 0)
+        );
+
+ // Test 11: An unknown food name should return no results.
+        System.out.println(
+                "11. Unknown food search: "
+                + (commonStack.search("Chicken").length == 0)
+        );
+  }
 }
